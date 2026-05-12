@@ -47,7 +47,7 @@ bitamin-finance build-kfi --date 2026-03-03 --max-etfs 50
 
 `--max-etfs`는 빠른 MVP 테스트용입니다. 전체 수집 시 생략합니다.
 
-회의에서 요청한 “종목별 ETF 편입 현황” CSV export:
+“종목별 ETF 편입 현황” CSV export:
 
 ```bash
 bitamin-finance export-exposure --date 2025-06-30 --output-dir data/processed/exposure_20250630
@@ -63,7 +63,7 @@ ETF 내 비중을 확인할 수 있게 합니다.
 bitamin-finance backfill --start-date 2025-01-01 --end-date 2025-06-30 --target stock
 ```
 
-자세한 수요일 공유용 사용법은 [docs/0510_meeting_usage.md](docs/0510_meeting_usage.md)를 참고합니다.
+자세한 사용법은 [docs/0510_meeting_usage.md](docs/0510_meeting_usage.md)를 참고합니다.
 
 ## Airflow DAGs
 
