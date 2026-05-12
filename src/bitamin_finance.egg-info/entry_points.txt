@@ -1,0 +1,2 @@
+[console_scripts]
+bitamin-finance = bitamin_finance.cli:main

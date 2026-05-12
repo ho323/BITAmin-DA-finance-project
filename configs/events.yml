@@ -1,0 +1,19 @@
+default_market_index: KOSPI
+events:
+  - name: report_shock_2026_03_03
+    event_date: "2026-03-03"
+    market_index: KOSPI
+    window:
+      pre_days: 1
+      post_days: 1
+  - name: report_shock_2026_03_04
+    event_date: "2026-03-04"
+    market_index: KOSPI
+    window:
+      pre_days: 1
+      post_days: 1
+placebo:
+  enabled: true
+  sample_size: 10
+  min_gap_days_from_event: 20
+
