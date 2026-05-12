@@ -88,7 +88,7 @@ DB에 이미 적재한 데이터를 기준으로 export:
 docker compose up -d postgres
 .venv/bin/bitamin-finance init-db
 .venv/bin/bitamin-finance backfill \
-  --start-date 2025-01-01 \
+  --start-date 2025-01-02 \
   --end-date 2025-06-30 \
   --target stock
 ```
@@ -97,7 +97,7 @@ docker compose up -d postgres
 
 ```bash
 .venv/bin/bitamin-finance backfill \
-  --start-date 2025-01-01 \
+  --start-date 2025-01-02 \
   --end-date 2025-06-30 \
   --target market-index
 ```

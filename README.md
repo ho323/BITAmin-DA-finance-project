@@ -60,10 +60,24 @@ ETF 내 비중을 확인할 수 있게 합니다.
 2025년 상반기 전 종목 가격 DB 백필:
 
 ```bash
-bitamin-finance backfill --start-date 2025-01-01 --end-date 2025-06-30 --target stock
+bitamin-finance backfill --start-date 2025-01-02 --end-date 2025-06-30 --target stock
 ```
 
 자세한 사용법은 [docs/0510_meeting_usage.md](docs/0510_meeting_usage.md)를 참고합니다.
+DB 테이블과 CSV 산출물 컬럼 정의는 [docs/data_specification.md](docs/data_specification.md)에 정리되어 있습니다.
+전체 워크플로우는 [docs/workflow.html](docs/workflow.html)에서 시각적으로 확인할 수 있습니다.
+
+## Collaboration Notes
+
+팀원 또는 새 Codex 세션이 이어서 작업할 때는 먼저 [AGENTS.md](AGENTS.md)를 확인합니다.
+`AGENTS.md`에는 프로젝트 의도, 주요 파일 위치, 변경 시 함께 수정해야 하는 문서, 검증 명령이 정리되어 있습니다.
+
+작업물이 바뀌면 다음 문서도 같이 맞춥니다.
+
+- 실행 방법이나 주요 명령이 바뀌면 `README.md`
+- DB 테이블, CSV 컬럼, K-FI 산식이 바뀌면 `docs/data_specification.md`
+- 0510 회의 요구사항 수행 절차가 바뀌면 `docs/0510_meeting_usage.md`
+- Codex/팀원 작업 규칙이나 주의사항이 바뀌면 `AGENTS.md`
 
 ## Airflow DAGs
 
