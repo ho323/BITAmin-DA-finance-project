@@ -14,7 +14,8 @@ KFI_WEIGHTS = {
 
 
 def safe_divide(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
-    denominator = denominator.replace({0: np.nan})
+    numerator = pd.to_numeric(numerator, errors="coerce")
+    denominator = pd.to_numeric(denominator, errors="coerce").replace({0: np.nan})
     return (numerator / denominator).replace([np.inf, -np.inf], np.nan)
 
 
@@ -40,6 +41,8 @@ def _average_trading_value(stock_history: pd.DataFrame, score_date: str) -> pd.D
     window = _latest_history_window(stock_history, score_date, window=20)
     if window.empty:
         return pd.DataFrame(columns=["ticker", "avg_trading_value_20d"])
+    window = window.copy()
+    window["trading_value"] = pd.to_numeric(window["trading_value"], errors="coerce")
     return (
         window.groupby("ticker", as_index=False)["trading_value"]
         .mean()
@@ -52,6 +55,7 @@ def _flow_stress(etf_daily: pd.DataFrame, score_date: str) -> pd.DataFrame:
         return pd.DataFrame(columns=["etf_ticker", "flow_stress_etf"])
     df = etf_daily.copy()
     df["trade_date"] = pd.to_datetime(df["trade_date"])
+    df["trading_value"] = pd.to_numeric(df["trading_value"], errors="coerce")
     score_ts = pd.to_datetime(score_date)
     latest = df.loc[df["trade_date"] == score_ts, ["etf_ticker", "trading_value"]].rename(
         columns={"trading_value": "latest_trading_value"}
@@ -83,6 +87,9 @@ def compute_kfi_components(
     stock = stock.rename(columns={"stock_ticker": "ticker"})
     if stock.empty:
         return pd.DataFrame()
+    for column in ["trading_value", "listed_shares_proxy"]:
+        if column in stock:
+            stock[column] = pd.to_numeric(stock[column], errors="coerce")
 
     holdings = etf_holdings.copy()
     holdings = holdings.rename(columns={"ticker": "stock_ticker"})
@@ -102,8 +109,12 @@ def compute_kfi_components(
         how="left",
     )
     holdings = holdings.merge(_flow_stress(etf_daily, score_date), on="etf_ticker", how="left")
-    holdings["is_leveraged"] = holdings["is_leveraged"].fillna(False)
-    holdings["is_inverse"] = holdings["is_inverse"].fillna(False)
+    holdings["is_leveraged"] = holdings["is_leveraged"].apply(
+        lambda value: bool(value) if pd.notna(value) else False
+    )
+    holdings["is_inverse"] = holdings["is_inverse"].apply(
+        lambda value: bool(value) if pd.notna(value) else False
+    )
     holdings["valuation_amount"] = pd.to_numeric(holdings.get("valuation_amount"), errors="coerce")
     holdings["shares"] = pd.to_numeric(holdings.get("shares"), errors="coerce")
     holdings["deviation_rate"] = pd.to_numeric(holdings.get("deviation_rate"), errors="coerce")
@@ -141,7 +152,11 @@ def compute_kfi_components(
         "flow_weighted_amount",
     ]
     base[exposure_cols] = base[exposure_cols].fillna(0.0)
+    for column in exposure_cols + ["trading_value"]:
+        if column in base:
+            base[column] = pd.to_numeric(base[column], errors="coerce")
     base["avg_trading_value_20d"] = base["avg_trading_value_20d"].fillna(base.get("trading_value", 0))
+    base["avg_trading_value_20d"] = pd.to_numeric(base["avg_trading_value_20d"], errors="coerce")
     listed_shares = pd.to_numeric(base.get("listed_shares_proxy"), errors="coerce")
     base["ownership_pressure"] = safe_divide(base["etf_holding_shares"], listed_shares).fillna(0.0)
     base["liquidity_pressure"] = safe_divide(
@@ -203,4 +218,3 @@ def compute_kfi_scores(
         "data_quality_flags",
     ]
     return components[columns].sort_values("kfi_korea", ascending=False).reset_index(drop=True)
-

@@ -17,7 +17,8 @@ st.title("Korean ETF Fragility Index")
 def read_sql(sql: str, params: dict[str, object] | None = None) -> pd.DataFrame:
     engine = get_engine()
     with engine.connect() as connection:
-        return pd.read_sql(text(sql), connection, params=params or {})
+        result = connection.execute(text(sql), params or {})
+        return pd.DataFrame(result.fetchall(), columns=result.keys())
 
 
 def available_dates(table: str, column: str) -> list[str]:
@@ -131,4 +132,3 @@ if not validation.empty:
             st.dataframe(fit_event_regression(validation), use_container_width=True, hide_index=True)
         except Exception as exc:
             st.warning(f"Regression unavailable: {exc}")
-
