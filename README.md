@@ -65,6 +65,7 @@ bitamin-finance backfill --start-date 2025-01-02 --end-date 2025-06-30 --target 
 
 자세한 사용법은 [docs/0510_meeting_usage.md](docs/0510_meeting_usage.md)를 참고합니다.
 DB 테이블과 CSV 산출물 컬럼 정의는 [docs/data_specification.md](docs/data_specification.md)에 정리되어 있습니다.
+처음 사용하는 분은 [docs/beginner_onboarding.md](docs/beginner_onboarding.md)를 먼저 읽으면 됩니다.
 전체 워크플로우는 [docs/workflow.html](docs/workflow.html)에서 시각적으로 확인할 수 있습니다.
 
 ## Collaboration Notes

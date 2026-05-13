@@ -3,66 +3,65 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BITAmin K-FI Project Workflow</title>
+  <title>BITAmin K-FI Workflow & Architecture</title>
   <style>
     :root {
-      --ink: #202124;
-      --muted: #5f6672;
-      --line: #d7dce2;
-      --surface: #ffffff;
-      --page: #f5f7f8;
-      --green: #16875f;
-      --green-soft: #e6f3ed;
-      --blue: #2764c7;
-      --blue-soft: #e8effb;
-      --red: #c64040;
-      --red-soft: #f8e9e8;
-      --amber: #a36b00;
-      --amber-soft: #f6edd8;
-      --violet: #6d59b8;
-      --violet-soft: #eeeafa;
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --ink: #17202a;
+      --muted: #64707d;
+      --line: #d8dde3;
+      --line-strong: #aeb7c2;
+      --green: #16845f;
+      --green-soft: #e7f3ee;
+      --blue: #2e64b7;
+      --blue-soft: #eaf0fa;
+      --amber: #9a6a12;
+      --amber-soft: #f7efd9;
+      --red: #bd4b4b;
+      --red-soft: #f8e8e8;
+      --violet: #6657a8;
+      --violet-soft: #efecfa;
+      --slate: #43515f;
+      --slate-soft: #eef1f4;
       --radius: 8px;
-      --shadow: 0 16px 48px rgba(32, 33, 36, 0.08);
+      --shadow: 0 18px 45px rgba(23, 32, 42, 0.08);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       color: var(--ink);
-      background: var(--page);
+      background: var(--bg);
       font-family:
         Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", "Noto Sans KR", sans-serif;
+        "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
       line-height: 1.55;
     }
 
     a {
-      color: var(--blue);
+      color: inherit;
       text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .page {
-      min-height: 100vh;
     }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      padding: 14px clamp(18px, 4vw, 56px);
+      gap: 20px;
+      padding: 14px clamp(18px, 4vw, 52px);
       border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(12px);
     }
 
@@ -70,20 +69,20 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      min-width: 220px;
-      font-weight: 760;
+      min-width: 245px;
+      font-weight: 800;
+      letter-spacing: 0;
     }
 
     .brand-mark {
-      display: inline-grid;
-      width: 28px;
-      height: 28px;
+      display: grid;
+      width: 32px;
+      height: 32px;
       place-items: center;
       border: 2px solid var(--ink);
       border-radius: 50%;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0;
+      font-size: 12px;
+      font-weight: 900;
     }
 
     nav {
@@ -98,47 +97,43 @@
       border-radius: 6px;
       color: var(--muted);
       font-size: 13px;
-      font-weight: 650;
+      font-weight: 700;
     }
 
     nav a:hover {
-      background: #eef1f4;
+      background: var(--slate-soft);
       color: var(--ink);
-      text-decoration: none;
     }
 
     .hero {
-      padding: clamp(38px, 7vw, 78px) clamp(18px, 4vw, 56px) 28px;
       border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, rgba(22, 135, 95, 0.10), transparent 26%),
-        linear-gradient(270deg, rgba(39, 100, 199, 0.10), transparent 24%),
-        #ffffff;
+      background: var(--paper);
     }
 
-    .hero-grid {
+    .hero-inner {
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
-      gap: clamp(24px, 4vw, 48px);
-      align-items: center;
+      grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
+      gap: clamp(28px, 5vw, 58px);
       max-width: 1280px;
       margin: 0 auto;
+      padding: clamp(38px, 6vw, 78px) clamp(18px, 4vw, 52px) clamp(32px, 5vw, 58px);
+      align-items: center;
     }
 
     .eyebrow {
       margin: 0 0 12px;
       color: var(--green);
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
     h1 {
+      max-width: 680px;
       margin: 0;
-      max-width: 720px;
-      font-size: 58px;
-      line-height: 1.06;
+      font-size: clamp(38px, 6vw, 64px);
+      line-height: 1.05;
       letter-spacing: 0;
     }
 
@@ -149,434 +144,425 @@
       font-size: 18px;
     }
 
-    .hero-actions {
+    .hero-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 26px;
     }
 
-    .button {
+    .pill {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 14px;
-      border: 1px solid var(--ink);
-      border-radius: 7px;
-      background: var(--ink);
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 760;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 750;
       white-space: nowrap;
     }
 
-    .button.secondary {
-      background: #ffffff;
-      color: var(--ink);
-      border-color: var(--line);
-    }
-
-    .button:hover {
-      text-decoration: none;
-      transform: translateY(-1px);
-    }
-
-    .pipeline {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .pipe-node {
-      position: relative;
-      min-height: 138px;
+    .hero-map {
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: #fbfcfd;
       box-shadow: var(--shadow);
     }
 
-    .pipe-node::after {
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .map-node {
+      position: relative;
+      min-height: 116px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .map-node::after {
       content: "";
       position: absolute;
       top: 50%;
-      right: -17px;
-      width: 20px;
-      height: 1px;
-      background: var(--line);
+      right: -11px;
+      width: 10px;
+      border-top: 2px solid var(--line-strong);
     }
 
-    .pipe-node:nth-child(3n)::after,
-    .pipe-node:last-child::after {
+    .map-node:nth-child(3)::after,
+    .map-node:nth-child(6)::after {
       display: none;
     }
 
-    .pipe-label {
+    .tag {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 7px;
+      margin-bottom: 8px;
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 11px;
+      font-weight: 900;
       text-transform: uppercase;
     }
 
     .dot {
-      display: inline-block;
       width: 9px;
       height: 9px;
       border-radius: 50%;
       background: var(--green);
     }
 
-    .pipe-node:nth-child(2) .dot,
-    .pipe-node:nth-child(5) .dot {
-      background: var(--blue);
-    }
+    .dot.blue { background: var(--blue); }
+    .dot.amber { background: var(--amber); }
+    .dot.red { background: var(--red); }
+    .dot.violet { background: var(--violet); }
+    .dot.slate { background: var(--slate); }
 
-    .pipe-node:nth-child(3) .dot,
-    .pipe-node:nth-child(6) .dot {
-      background: var(--amber);
-    }
-
-    .pipe-node h2 {
-      margin: 0 0 8px;
-      font-size: 20px;
-      line-height: 1.22;
+    .map-node h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      line-height: 1.2;
       letter-spacing: 0;
     }
 
-    .pipe-node p {
+    .map-node p {
       margin: 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     main {
-      max-width: 1180px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 34px clamp(18px, 4vw, 40px) 72px;
+      padding: 34px clamp(18px, 4vw, 52px) 72px;
     }
 
     section {
-      padding: 36px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    section:last-child {
-      border-bottom: 0;
+      margin-top: 34px;
+      padding: clamp(22px, 3vw, 34px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 32px rgba(23, 32, 42, 0.04);
     }
 
     .section-head {
-      display: grid;
-      grid-template-columns: minmax(0, 0.46fr) minmax(0, 0.54fr);
-      gap: 28px;
-      align-items: start;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
       margin-bottom: 22px;
     }
 
-    h2 {
+    .section-head h2 {
       margin: 0;
-      font-size: 34px;
-      line-height: 1.14;
+      font-size: clamp(25px, 3vw, 34px);
+      line-height: 1.12;
       letter-spacing: 0;
     }
 
     .section-head p {
-      margin: 0;
+      max-width: 560px;
+      margin: 4px 0 0;
       color: var(--muted);
     }
 
-    .step-grid {
+    .architecture {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(180px, 1fr));
       gap: 12px;
-    }
-
-    .step {
-      min-height: 188px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-
-    .step strong {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 16px;
-    }
-
-    .step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .num {
-      display: inline-grid;
-      width: 30px;
-      height: 30px;
-      place-items: center;
-      margin-bottom: 14px;
-      border-radius: 50%;
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-size: 13px;
-      font-weight: 850;
-    }
-
-    .data-lanes {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
     }
 
     .lane {
-      padding: 20px;
+      min-width: 180px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: #fbfcfd;
     }
 
-    .lane h3,
-    .command h3,
-    .rule h3 {
-      margin: 0 0 12px;
-      font-size: 18px;
+    .lane-title {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .lane-body {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .box {
+      position: relative;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-left-width: 4px;
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .box.source { border-left-color: var(--green); }
+    .box.python { border-left-color: var(--blue); }
+    .box.db { border-left-color: var(--amber); }
+    .box.airflow { border-left-color: var(--violet); }
+    .box.output { border-left-color: var(--red); }
+
+    .box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .connector-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0 2px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .connector-row div {
+      position: relative;
+      padding-top: 12px;
+    }
+
+    .connector-row div::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top: 2px solid var(--line-strong);
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 12px;
+      overflow-x: auto;
+    }
+
+    .step {
+      min-width: 150px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfd;
+    }
+
+    .step-number {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      margin-bottom: 12px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .step h3,
+    .table-card h3,
+    .dag-card h3,
+    .formula-card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.25;
       letter-spacing: 0;
     }
 
-    .lane ul,
-    .rule ul {
+    .step p,
+    .table-card p,
+    .dag-card p,
+    .formula-card p {
       margin: 0;
-      padding-left: 18px;
       color: var(--muted);
+      font-size: 13px;
     }
 
-    .lane li,
-    .rule li {
-      margin: 8px 0;
+    .db-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .schema {
-      overflow-x: auto;
+    .table-card {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: #fbfcfd;
+      overflow: hidden;
     }
 
-    table {
-      width: 100%;
-      min-width: 760px;
-      border-collapse: collapse;
-      font-size: 14px;
+    .table-card h3 {
+      padding: 13px 14px 0;
     }
 
-    th,
-    td {
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
+    .table-card p {
+      padding: 0 14px 12px;
     }
 
-    th {
-      background: #eef1f4;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    code {
-      border-radius: 5px;
-      background: #eef1f4;
-      padding: 2px 5px;
-      color: #26313d;
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 0.92em;
-    }
-
-    pre {
+    .table-list {
+      display: grid;
+      gap: 1px;
       margin: 0;
-      overflow-x: auto;
-      border: 1px solid #d9e1ea;
-      border-radius: var(--radius);
-      background: #111820;
-      color: #edf4ff;
-      padding: 16px;
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    pre code {
       padding: 0;
-      background: transparent;
-      color: inherit;
+      list-style: none;
+      border-top: 1px solid var(--line);
+      background: var(--line);
     }
 
-    .commands {
+    .table-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 12px;
+      background: var(--paper);
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .table-list code {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .dag-grid,
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .dag-card,
+    .formula-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfd;
+    }
+
+    .dag-card .tag,
+    .formula-card .tag {
+      margin-bottom: 10px;
+    }
+
+    .formula-card {
+      background: var(--paper);
+    }
+
+    .formula-card code,
+    .command code,
+    .note code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .formula {
+      margin: 10px 0 0;
+      padding: 12px;
+      border-radius: 6px;
+      background: #f2f4f6;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .command-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
     .command {
-      padding: 18px;
+      padding: 15px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: #fbfcfd;
     }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 16px 0 0;
+    .command strong {
+      display: block;
+      margin-bottom: 8px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 0 9px;
-      border-radius: 999px;
-      background: var(--green-soft);
-      color: var(--green);
+    .command pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 6px;
+      background: #17202a;
+      color: #f6f7f9;
+      overflow-x: auto;
       font-size: 12px;
-      font-weight: 760;
+      line-height: 1.55;
     }
 
-    .badge.blue {
-      background: var(--blue-soft);
-      color: var(--blue);
-    }
-
-    .badge.amber {
-      background: var(--amber-soft);
-      color: var(--amber);
-    }
-
-    .badge.red {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .formula {
-      display: grid;
-      grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr);
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .formula-box {
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-
-    .formula-box h3 {
-      margin: 0 0 12px;
-      font-size: 19px;
-    }
-
-    .formula-list {
-      display: grid;
-      gap: 9px;
-      margin-top: 14px;
-    }
-
-    .formula-item {
-      display: grid;
-      grid-template-columns: 74px minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      padding: 11px;
-      border-radius: 7px;
-      background: #f4f6f8;
-      font-size: 14px;
-    }
-
-    .formula-item span {
-      color: var(--muted);
-      font-weight: 750;
-    }
-
-    .rules {
+    .note-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
     }
 
-    .rule {
-      padding: 18px;
+    .note {
+      padding: 15px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: #fbfcfd;
     }
 
-    .footer {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 26px clamp(18px, 4vw, 40px) 46px;
+    .note strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .note p {
+      margin: 0;
       color: var(--muted);
       font-size: 13px;
     }
 
-    @media (max-width: 980px) {
-      h1 {
-        font-size: 46px;
-      }
-
-      h2 {
-        font-size: 30px;
-      }
-
-      .hero-grid,
-      .section-head,
-      .formula {
-        grid-template-columns: 1fr;
-      }
-
-      .pipeline,
-      .step-grid,
-      .rules {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .data-lanes,
-      .commands {
-        grid-template-columns: 1fr;
-      }
-
-      .pipe-node::after {
-        display: none;
-      }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
     }
 
-    @media (max-width: 680px) {
-      h1 {
-        font-size: 34px;
-      }
+    .legend .pill {
+      border-radius: 6px;
+      background: #fbfcfd;
+    }
 
-      h2 {
-        font-size: 26px;
-      }
-
-      .hero-copy {
-        font-size: 16px;
-      }
-
+    @media (max-width: 980px) {
       .topbar {
-        position: static;
         align-items: flex-start;
         flex-direction: column;
       }
@@ -585,290 +571,407 @@
         justify-content: flex-start;
       }
 
-      .hero {
-        padding-top: 32px;
-      }
-
-      .pipeline,
-      .step-grid,
-      .rules {
+      .hero-inner {
         grid-template-columns: 1fr;
       }
 
-      .pipe-node,
-      .step {
-        min-height: auto;
+      .map-grid,
+      .db-grid,
+      .dag-grid,
+      .formula-grid,
+      .command-grid,
+      .note-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .button {
-        width: 100%;
+      .section-head {
+        display: block;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .brand {
+        min-width: 0;
+      }
+
+      .map-grid,
+      .db-grid,
+      .dag-grid,
+      .formula-grid,
+      .command-grid,
+      .note-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .map-node::after {
+        display: none;
+      }
+
+      section {
+        padding: 18px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">K</span>
-        <span>BITAmin K-FI Workflow</span>
-      </div>
-      <nav aria-label="페이지 섹션">
-        <a href="#overview">Overview</a>
-        <a href="#collect">Collect</a>
-        <a href="#database">Database</a>
-        <a href="#outputs">Outputs</a>
-        <a href="#kfi">K-FI</a>
-        <a href="#collaboration">Collaboration</a>
-      </nav>
-    </header>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="BITAmin K-FI workflow top">
+      <span class="brand-mark">KFI</span>
+      <span>BITAmin Finance Workflow</span>
+    </a>
+    <nav aria-label="문서 섹션">
+      <a href="#architecture">Architecture</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#database">Data Model</a>
+      <a href="#airflow">Airflow</a>
+      <a href="#kfi">K-FI</a>
+      <a href="#commands">Commands</a>
+    </nav>
+  </header>
 
-    <section class="hero" id="overview">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow">Korean ETF Fragility Index</p>
-          <h1>전 종목 DB에서 K-FI 검증까지 이어지는 프로젝트 워크플로우</h1>
-          <p class="hero-copy">
-            KRX 데이터를 수집해 PostgreSQL에 쌓고, ETF 구성종목 노출을 계산한 뒤
-            한국형 Fragility Index와 이벤트 검증 결과를 재현 가능한 형태로 산출한다.
-          </p>
-          <div class="hero-actions">
-            <a class="button" href="#commands">실행 명령 보기</a>
-            <a class="button secondary" href="data_specification.md">데이터 명세서</a>
-            <a class="button secondary" href="../AGENTS.md">AGENTS.md</a>
+  <div id="top" class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">Korean ETF Fragility Index</p>
+        <h1>전 종목 데이터에서 ETF 보유 압력과 이벤트 검증까지</h1>
+        <p class="hero-copy">
+          KRX/pykrx 수집, PostgreSQL 적재, K-FI 산출, 이벤트 검증, Streamlit 리포팅을 한 화면에서
+          이해할 수 있도록 정리한 프로젝트 운영 지도입니다.
+        </p>
+        <div class="hero-meta">
+          <span class="pill">분석 기간: 2025-01-02 ~ 2025-06-30</span>
+          <span class="pill">DB schema: bitamin</span>
+          <span class="pill">Index version: kfi_korea_mvp_v1</span>
+        </div>
+      </div>
+
+      <div class="hero-map" aria-label="핵심 파이프라인 요약">
+        <div class="map-grid">
+          <article class="map-node">
+            <span class="tag"><span class="dot"></span>Source</span>
+            <h2>KRX / pykrx</h2>
+            <p>주식, ETF, NAV, 괴리율, PDF 구성종목, 시장지수</p>
+          </article>
+          <article class="map-node">
+            <span class="tag"><span class="dot blue"></span>ETL</span>
+            <h2>Python CLI</h2>
+            <p>수집 결과 정규화, 품질 플래그, idempotent upsert</p>
+          </article>
+          <article class="map-node">
+            <span class="tag"><span class="dot amber"></span>Store</span>
+            <h2>PostgreSQL</h2>
+            <p>연도별 파티션 fact table과 dim table 저장</p>
+          </article>
+          <article class="map-node">
+            <span class="tag"><span class="dot violet"></span>Feature</span>
+            <h2>K-FI Build</h2>
+            <p>보유 압력, 유동성 압력, 괴리율/flow stress 산출</p>
+          </article>
+          <article class="map-node">
+            <span class="tag"><span class="dot red"></span>Validate</span>
+            <h2>Event Study</h2>
+            <p>초과 하락률, decile test, HC3 회귀분석</p>
+          </article>
+          <article class="map-node">
+            <span class="tag"><span class="dot slate"></span>Report</span>
+            <h2>Dashboard</h2>
+            <p>Streamlit, CSV, HTML 문서로 재현 가능한 결과 확인</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section id="architecture">
+      <div class="section-head">
+        <h2>System Architecture</h2>
+        <p>
+          Docker Compose 안에서 PostgreSQL, Airflow, Streamlit이 함께 돌고, 같은 Python package가
+          CLI와 DAG 양쪽에서 재사용됩니다.
+        </p>
+      </div>
+
+      <div class="architecture" aria-label="시스템 아키텍처 다이어그램">
+        <div class="lane">
+          <div class="lane-title">Data Sources</div>
+          <div class="lane-body">
+            <div class="box source">
+              <strong>KRX Stock</strong>
+              <span>전 종목 universe, OHLCV, 시가총액, 상장주식수</span>
+            </div>
+            <div class="box source">
+              <strong>KRX ETF</strong>
+              <span>ETF universe, 일봉, NAV, 괴리율, PDF 구성종목</span>
+            </div>
+            <div class="box source">
+              <strong>Market Index</strong>
+              <span>KOSPI, KOSDAQ, KOSPI200 지수 일봉</span>
+            </div>
           </div>
         </div>
 
-        <div class="pipeline" aria-label="프로젝트 파이프라인">
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 1</div>
-            <h2>환경 준비</h2>
-            <p>Docker, PostgreSQL, Python 패키지, KRX 계정 정보를 설정한다.</p>
-          </article>
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 2</div>
-            <h2>KRX 수집</h2>
-            <p>주식 일봉, ETF 일봉, NAV/괴리율, ETF PDF 구성종목을 가져온다.</p>
-          </article>
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 3</div>
-            <h2>DB 적재</h2>
-            <p>중복 실행 가능한 upsert로 `bitamin` schema에 저장한다.</p>
-          </article>
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 4</div>
-            <h2>ETF 노출 산출</h2>
-            <p>종목별 ETF 보유수량, 보유비율, ETF별 구성종목 수를 만든다.</p>
-          </article>
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 5</div>
-            <h2>K-FI 계산</h2>
-            <p>ownership, liquidity, leverage, deviation, flow stress를 결합한다.</p>
-          </article>
-          <article class="pipe-node">
-            <div class="pipe-label"><span class="dot"></span>Step 6</div>
-            <h2>검증/보고</h2>
-            <p>이벤트 초과 하락률, decile, 회귀분석, 대시보드와 CSV를 생성한다.</p>
-          </article>
+        <div class="lane">
+          <div class="lane-title">Python Package</div>
+          <div class="lane-body">
+            <div class="box python">
+              <strong>data.krx_client</strong>
+              <span>pykrx 호출, 컬럼 정규화, KRXDataError</span>
+            </div>
+            <div class="box python">
+              <strong>etl.jobs / loaders</strong>
+              <span>수집 작업, upsert, ETL 로그, 품질검사</span>
+            </div>
+            <div class="box python">
+              <strong>features / validation</strong>
+              <span>노출 CSV, K-FI 계산, 이벤트 검증</span>
+            </div>
+          </div>
         </div>
+
+        <div class="lane">
+          <div class="lane-title">PostgreSQL</div>
+          <div class="lane-body">
+            <div class="box db">
+              <strong>dim tables</strong>
+              <span>dim_stock, dim_etf</span>
+            </div>
+            <div class="box db">
+              <strong>fact tables</strong>
+              <span>stock, ETF, holdings, index, K-FI, validation</span>
+            </div>
+            <div class="box db">
+              <strong>operation logs</strong>
+              <span>etl_run_log, data_quality_check</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">Orchestration</div>
+          <div class="lane-body">
+            <div class="box airflow">
+              <strong>Airflow Webserver</strong>
+              <span>http://localhost:8080</span>
+            </div>
+            <div class="box airflow">
+              <strong>Airflow Scheduler</strong>
+              <span>장마감 이후 평일 19:00 DAG 실행</span>
+            </div>
+            <div class="box airflow">
+              <strong>CLI Backfill</strong>
+              <span>팀원이 같은 명령으로 재현 가능한 수동 실행</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">Outputs</div>
+          <div class="lane-body">
+            <div class="box output">
+              <strong>Streamlit</strong>
+              <span>K-FI 랭킹, 컴포넌트, 이벤트 검증 시각화</span>
+            </div>
+            <div class="box output">
+              <strong>CSV Exports</strong>
+              <span>종목별 ETF 편입 현황, 후보 종목, 검증 결과</span>
+            </div>
+            <div class="box output">
+              <strong>Reports</strong>
+              <span>decile summary, regression table, HTML workflow</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector-row" aria-hidden="true">
+        <div>collect</div>
+        <div>normalize & load</div>
+        <div>build & validate</div>
+        <div>review & export</div>
       </div>
     </section>
 
-    <main>
-      <section id="collect">
-        <div class="section-head">
-          <h2>1. 수집 단계</h2>
-          <p>
-            수집은 Python CLI와 Airflow DAG가 같은 ETL 함수를 호출하는 구조다.
-            빠른 확인은 `--max-etfs`로 하고, 실제 분석에서는 전체 ETF 수집을 수행한다.
-          </p>
-        </div>
-        <div class="step-grid">
-          <article class="step">
-            <span class="num">01</span>
-            <strong>주식 universe</strong>
-            <p>KOSPI/KOSDAQ 전 종목 코드와 종목명을 `dim_stock`에 적재한다.</p>
-          </article>
-          <article class="step">
-            <span class="num">02</span>
-            <strong>주식 일봉</strong>
-            <p>OHLCV, 거래대금, 시가총액, 상장주식수 proxy를 `fact_stock_daily`에 쌓는다.</p>
-          </article>
-          <article class="step">
-            <span class="num">03</span>
-            <strong>ETF 데이터</strong>
-            <p>ETF 가격, 거래대금, NAV, 괴리율, PDF 구성종목을 수집한다.</p>
-          </article>
-          <article class="step">
-            <span class="num">04</span>
-            <strong>시장지수</strong>
-            <p>KOSPI, KOSDAQ, KOSPI200 지수 일봉을 검증용 시장수익률로 사용한다.</p>
-          </article>
-        </div>
-        <div class="badge-row" aria-label="수집 특성">
-          <span class="badge">idempotent upsert</span>
-          <span class="badge blue">KRX login required</span>
-          <span class="badge amber">ETF PDF can be slow</span>
-          <span class="badge red">rerun safe</span>
-        </div>
-      </section>
+    <section id="workflow">
+      <div class="section-head">
+        <h2>Analysis Workflow</h2>
+        <p>
+          2025년 상반기 분석 기준으로, 데이터 적재부터 후보 종목 확인과 K-FI 검증까지 이어지는
+          재현 가능한 순서입니다.
+        </p>
+      </div>
 
-      <section id="database">
-        <div class="section-head">
-          <h2>2. DB 적재 구조</h2>
-          <p>
-            원천 수집 결과는 CSV가 아니라 PostgreSQL에 먼저 저장된다.
-            CSV는 분석 또는 회의 공유가 필요할 때 DB에서 다시 산출한다.
-          </p>
-        </div>
-        <div class="schema">
-          <table>
-            <thead>
-              <tr>
-                <th>Layer</th>
-                <th>Table</th>
-                <th>Primary Key</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Dimension</td>
-                <td><code>dim_stock</code></td>
-                <td><code>ticker</code></td>
-                <td>종목코드, 종목명, 시장 구분을 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Dimension</td>
-                <td><code>dim_etf</code></td>
-                <td><code>etf_ticker</code></td>
-                <td>ETF명과 레버리지, 인버스, 합성, 해외형 분류를 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Fact</td>
-                <td><code>fact_stock_daily</code></td>
-                <td><code>trade_date, ticker</code></td>
-                <td>전 종목 일봉, 거래대금, 시가총액, 상장주식수 proxy를 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Fact</td>
-                <td><code>fact_etf_daily</code></td>
-                <td><code>trade_date, etf_ticker</code></td>
-                <td>ETF 일봉, NAV, 괴리율, 거래대금을 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Fact</td>
-                <td><code>fact_etf_holdings</code></td>
-                <td><code>as_of_date, etf_ticker, stock_ticker</code></td>
-                <td>ETF PDF 구성종목, 보유수량, 평가금액, 비중을 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Feature</td>
-                <td><code>fact_kfi_scores</code></td>
-                <td><code>score_date, ticker, index_version</code></td>
-                <td>K-FI 구성요소와 최종 점수를 저장한다.</td>
-              </tr>
-              <tr>
-                <td>Validation</td>
-                <td><code>fact_event_validation</code></td>
-                <td><code>event_date, ticker, index_version</code></td>
-                <td>이벤트 수익률, 초과 하락률, decile, 회귀 입력값을 저장한다.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <div class="workflow" aria-label="분석 워크플로우">
+        <article class="step">
+          <div class="step-number">1</div>
+          <h3>DB 초기화</h3>
+          <p>schema, yearly partition, index, ETL 로그 테이블을 준비합니다.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">2</div>
+          <h3>주식/지수 백필</h3>
+          <p>2025-01-02부터 2025-06-30까지 전 종목과 시장지수를 적재합니다.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">3</div>
+          <h3>ETF 기준일 수집</h3>
+          <p>ETF 일봉, NAV/괴리율, PDF holdings를 기준일 단위로 수집합니다.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">4</div>
+          <h3>노출 테이블 생성</h3>
+          <p>종목별 ETF 보유 주식수, 평가금액, 편입 ETF 수를 CSV로 확인합니다.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">5</div>
+          <h3>K-FI 산출</h3>
+          <p>ownership, liquidity, leveraged/inverse, deviation, flow stress를 z-score로 결합합니다.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">6</div>
+          <h3>이벤트 검증</h3>
+          <p>초과 하락률, decile test, 회귀분석을 대시보드와 CSV 리포트로 검토합니다.</p>
+        </article>
+      </div>
+    </section>
 
-      <section id="outputs">
-        <div class="section-head">
-          <h2>3. 회의용 산출물</h2>
-          <p>
-            `export-exposure`는 ETF 보유 구조를 종목 기준과 ETF 기준으로 나누어 CSV로 만든다.
-            참석자 3 요구사항인 구성종목, 보유 종목 수, 비율 확인은 이 단계에서 해결된다.
-          </p>
-        </div>
-        <div class="data-lanes">
-          <article class="lane">
-            <h3>종목 기준 파일</h3>
-            <ul>
-              <li><code>*_stock_etf_exposure_summary.csv</code>: 종목별 ETF 보유 합계와 ETF 보유비율</li>
-              <li><code>*_stock_etf_exposure_detail.csv</code>: 종목-ETF 단위 보유수량, 평가금액, ETF 내 비중</li>
-              <li><code>*_stock_etf_exposure_matrix.csv</code>: 행은 종목, 열은 ETF인 wide matrix</li>
-              <li><code>*_candidate_stocks.csv</code>: ETF 노출 기준 후보 종목 리스트</li>
-            </ul>
-          </article>
-          <article class="lane">
-            <h3>ETF 기준 파일</h3>
-            <ul>
-              <li><code>*_etf_constituent_summary.csv</code>: ETF별 구성종목 수와 최대 비중 종목</li>
-              <li><code>*_etf_constituents.csv</code>: ETF별 구성종목 상세, 보유수량, 평가금액, 비중</li>
-              <li><code>valuation_weight_calc</code>: 평가금액 기준 재계산 비중</li>
-              <li><code>shares_pct_of_stock</code>: ETF 보유수량 / 종목 상장주식수 proxy</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+    <section id="database">
+      <div class="section-head">
+        <h2>Data Model</h2>
+        <p>
+          primary key 기준 upsert로 같은 날짜를 다시 실행해도 덮어쓰기됩니다. fact table은 날짜 기준
+          yearly range partition을 사용합니다.
+        </p>
+      </div>
 
-      <section id="kfi">
-        <div class="section-head">
-          <h2>4. K-FI 산출과 검증</h2>
-          <p>
-            K-FI는 ETF가 개별 종목에 만드는 구조적 압력과 유동성 충격 가능성을 단면 z-score로 표준화해 결합한다.
-            검증은 이벤트일의 초과 하락률이 높은 K-FI 종목에서 더 크게 나타나는지 확인한다.
-          </p>
-        </div>
-        <div class="formula">
-          <article class="formula-box">
-            <h3>K-FI Korea</h3>
-            <pre><code>0.30*z(ownership)
-+ 0.30*z(liquidity)
-+ 0.15*z(leveraged_inverse)
-+ 0.15*z(deviation)
-+ 0.10*z(flow_proxy)</code></pre>
-          </article>
-          <article class="formula-box">
-            <h3>검증 프레임</h3>
-            <pre><code>excess_drop = -(stock_return - market_return)
+      <div class="db-grid">
+        <article class="table-card">
+          <h3>Master Tables</h3>
+          <p>종목과 ETF의 기준 정보를 보관합니다.</p>
+          <ul class="table-list">
+            <li><span>종목 마스터</span><code>dim_stock</code></li>
+            <li><span>ETF 마스터</span><code>dim_etf</code></li>
+          </ul>
+        </article>
 
-excess_drop ~ kfi_korea
-            + log(market_cap)
-            + volatility_20d
-            + turnover</code></pre>
-          </article>
-        </div>
-        <div class="formula-list">
-          <div class="formula-item">
-            <span>Base</span>
-            <div>ownership pressure와 liquidity pressure만 사용해 기준 모델을 만든다.</div>
-          </div>
-          <div class="formula-item">
-            <span>Korea</span>
-            <div>레버리지/인버스, 괴리율, ETF 거래 스트레스를 추가해 한국 ETF 시장 특성을 반영한다.</div>
-          </div>
-          <div class="formula-item">
-            <span>Success</span>
-            <div>K-FI Korea가 Base보다 설명력, 계수 방향, decile 분리에서 개선되면 성공 기준에 가까워진다.</div>
-          </div>
-        </div>
-      </section>
+        <article class="table-card">
+          <h3>Market Facts</h3>
+          <p>원천 시장 데이터를 일자별로 저장합니다.</p>
+          <ul class="table-list">
+            <li><span>주식 일봉</span><code>fact_stock_daily</code></li>
+            <li><span>ETF 일봉</span><code>fact_etf_daily</code></li>
+            <li><span>ETF holdings</span><code>fact_etf_holdings</code></li>
+            <li><span>시장지수</span><code>fact_market_index_daily</code></li>
+          </ul>
+        </article>
 
-      <section id="commands">
-        <div class="section-head">
-          <h2>5. 실행 명령</h2>
-          <p>
-            아래 명령은 로컬 `.venv`와 Docker PostgreSQL이 준비되어 있다는 전제다.
-            ETF PDF 수집에는 `.env`의 `KRX_ID`, `KRX_PW`가 필요하다.
-          </p>
-        </div>
-        <div class="commands">
-          <article class="command">
-            <h3>초기화</h3>
-            <pre><code>docker compose up -d postgres
+        <article class="table-card">
+          <h3>Derived Facts</h3>
+          <p>K-FI와 검증 결과를 재조회 가능한 형태로 저장합니다.</p>
+          <ul class="table-list">
+            <li><span>K-FI 점수</span><code>fact_kfi_scores</code></li>
+            <li><span>이벤트 검증</span><code>fact_event_validation</code></li>
+            <li><span>실행 로그</span><code>etl_run_log</code></li>
+            <li><span>품질검사</span><code>data_quality_check</code></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="airflow">
+      <div class="section-head">
+        <h2>Airflow DAGs</h2>
+        <p>
+          정기 수집은 Airflow가 맡고, 백필과 회의용 산출물 생성은 CLI로 수행하는 구조입니다.
+        </p>
+      </div>
+
+      <div class="dag-grid">
+        <article class="dag-card">
+          <span class="tag"><span class="dot blue"></span>Daily</span>
+          <h3>dag_stock_daily_ingest</h3>
+          <p>전 종목 주식 일봉과 시장지수를 함께 적재합니다.</p>
+        </article>
+        <article class="dag-card">
+          <span class="tag"><span class="dot green"></span>Daily</span>
+          <h3>dag_etf_daily_ingest</h3>
+          <p>ETF 가격, NAV/괴리율, PDF 구성종목을 적재합니다.</p>
+        </article>
+        <article class="dag-card">
+          <span class="tag"><span class="dot violet"></span>Manual</span>
+          <h3>dag_kfi_build</h3>
+          <p>DB 적재 데이터를 읽어 K-FI component와 최종 점수를 저장합니다.</p>
+        </article>
+        <article class="dag-card">
+          <span class="tag"><span class="dot red"></span>Manual</span>
+          <h3>dag_kfi_validation</h3>
+          <p>trigger conf의 event_date, score_date, market_index로 검증 테이블을 생성합니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="kfi">
+      <div class="section-head">
+        <h2>K-FI Calculation</h2>
+        <p>
+          K-FI는 ETF가 특정 종목에 만드는 보유 압력과 유동성 충격 가능성을 중심에 두고,
+          한국 ETF 시장 특성인 레버리지/인버스와 괴리율 스트레스를 더합니다.
+        </p>
+      </div>
+
+      <div class="formula-grid">
+        <article class="formula-card">
+          <span class="tag"><span class="dot blue"></span>Base</span>
+          <h3>K-FI Base</h3>
+          <p>ETF 보유와 유동성 압력을 50:50으로 결합합니다.</p>
+          <pre class="formula">0.50 * z(ownership_pressure)
++ 0.50 * z(liquidity_pressure)</pre>
+        </article>
+        <article class="formula-card">
+          <span class="tag"><span class="dot violet"></span>Korea</span>
+          <h3>K-FI Korea</h3>
+          <p>한국 ETF 시장의 구조적 스트레스를 반영한 MVP 산식입니다.</p>
+          <pre class="formula">0.30 * z(ownership_pressure)
++ 0.30 * z(liquidity_pressure)
++ 0.15 * z(leveraged_inverse_pressure)
++ 0.15 * z(deviation_stress)
++ 0.10 * z(flow_stress)</pre>
+        </article>
+        <article class="formula-card">
+          <span class="tag"><span class="dot amber"></span>Exposure</span>
+          <h3>Core Components</h3>
+          <p>종목별 ETF holding을 stock universe와 결합합니다.</p>
+          <pre class="formula">ownership = ETF held shares / listed shares proxy
+liquidity = ETF valuation / avg trading value 20d</pre>
+        </article>
+        <article class="formula-card">
+          <span class="tag"><span class="dot red"></span>Validation</span>
+          <h3>Event Study</h3>
+          <p>K-FI가 높은 종목이 이벤트일에 더 크게 초과 하락하는지 검증합니다.</p>
+          <pre class="formula">excess_drop = -(stock_return - market_return)
+model = excess_drop ~ KFI + controls</pre>
+        </article>
+      </div>
+    </section>
+
+    <section id="commands">
+      <div class="section-head">
+        <h2>Operational Commands</h2>
+        <p>
+          팀원이 같은 환경에서 다시 실행할 때 필요한 대표 명령입니다. KRX live 수집에는
+          <code>KRX_ID</code>, <code>KRX_PW</code>가 필요합니다.
+        </p>
+      </div>
+
+      <div class="command-grid">
+        <article class="command">
+          <strong>로컬 서비스와 DB 초기화</strong>
+          <pre><code>docker compose up --build
 .venv/bin/bitamin-finance init-db</code></pre>
-          </article>
-          <article class="command">
-            <h3>2025년 상반기 주식/지수</h3>
-            <pre><code>.venv/bin/bitamin-finance backfill \
+        </article>
+        <article class="command">
+          <strong>2025년 상반기 주식/지수 백필</strong>
+          <pre><code>.venv/bin/bitamin-finance backfill \
   --start-date 2025-01-02 \
   --end-date 2025-06-30 \
   --target stock
@@ -877,69 +980,58 @@ excess_drop ~ kfi_korea
   --start-date 2025-01-02 \
   --end-date 2025-06-30 \
   --target market-index</code></pre>
-          </article>
-          <article class="command">
-            <h3>ETF 스냅샷</h3>
-            <pre><code>.venv/bin/bitamin-finance ingest \
+        </article>
+        <article class="command">
+          <strong>ETF 기준일 수집</strong>
+          <pre><code>.venv/bin/bitamin-finance ingest \
   --date 2025-06-30 \
-  --target etf</code></pre>
-          </article>
-          <article class="command">
-            <h3>CSV 산출</h3>
-            <pre><code>.venv/bin/bitamin-finance export-exposure \
+  --target etf
+
+.venv/bin/bitamin-finance ingest \
+  --date 2025-06-30 \
+  --target etf \
+  --max-etfs 20</code></pre>
+        </article>
+        <article class="command">
+          <strong>종목별 ETF 편입 현황 CSV</strong>
+          <pre><code>.venv/bin/bitamin-finance export-exposure \
   --date 2025-06-30 \
   --from-db \
   --output-dir data/processed/exposure_20250630</code></pre>
-          </article>
-        </div>
-      </section>
+        </article>
+      </div>
 
-      <section id="collaboration">
-        <div class="section-head">
-          <h2>6. 협업과 문서 관리</h2>
-          <p>
-            이 프로젝트는 데이터 계약이 중요하므로 코드만 고치면 안 된다.
-            DB, CSV, 산식, CLI가 바뀌면 관련 문서를 같은 작업에서 맞춘다.
-          </p>
-        </div>
-        <div class="rules">
-          <article class="rule">
-            <h3>새 작업 시작</h3>
-            <ul>
-              <li><code>AGENTS.md</code>를 먼저 읽는다.</li>
-              <li>관련 모듈과 테스트를 확인한다.</li>
-              <li>기존 CLI와 DB 계약을 유지한다.</li>
-            </ul>
-          </article>
-          <article class="rule">
-            <h3>문서 동기화</h3>
-            <ul>
-              <li>명령 변경: <code>README.md</code></li>
-              <li>데이터 변경: <code>docs/data_specification.md</code></li>
-              <li>회의 절차 변경: <code>docs/0510_meeting_usage.md</code></li>
-            </ul>
-          </article>
-          <article class="rule">
-            <h3>검증</h3>
-            <ul>
-              <li><code>.venv/bin/pytest -q</code></li>
-              <li><code>docker compose config --quiet</code></li>
-              <li>ETL 변경은 <code>--max-etfs 5</code>로 smoke test</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-    </main>
+      <div class="legend" aria-label="운영 메모">
+        <span class="pill">Airflow: http://localhost:8080</span>
+        <span class="pill">Streamlit: http://localhost:8501</span>
+        <span class="pill">PostgreSQL: localhost:5432</span>
+        <span class="pill">Smoke test: --max-etfs</span>
+      </div>
+    </section>
 
-    <footer class="footer">
-      <p>
-        Related docs:
-        <a href="../README.md">README</a>,
-        <a href="../AGENTS.md">AGENTS</a>,
-        <a href="data_specification.md">Data Specification</a>,
-        <a href="0510_meeting_usage.md">0510 Meeting Usage</a>.
-      </p>
-    </footer>
-  </div>
+    <section id="notes">
+      <div class="section-head">
+        <h2>Operating Notes</h2>
+        <p>
+          프로젝트를 이어받는 사람이 먼저 확인해야 할 제약과 안전장치입니다.
+        </p>
+      </div>
+
+      <div class="note-grid">
+        <article class="note">
+          <strong>날짜 범위</strong>
+          <p><code>2025-01-01</code>은 휴장일이고 <code>2025-06-31</code>은 존재하지 않으므로, H1 분석은 <code>2025-01-02</code>부터 <code>2025-06-30</code>까지 사용합니다.</p>
+        </article>
+        <article class="note">
+          <strong>재실행 정책</strong>
+          <p>fact table은 primary key 기준 upsert입니다. 수집이 중간에 멈추면 같은 날짜 명령을 다시 실행합니다.</p>
+        </article>
+        <article class="note">
+          <strong>문서 동기화</strong>
+          <p>DB schema, CSV 컬럼, K-FI 산식이 바뀌면 README와 <code>docs/data_specification.md</code>도 함께 맞춥니다.</p>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
