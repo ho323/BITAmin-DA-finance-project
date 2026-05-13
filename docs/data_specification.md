@@ -421,6 +421,37 @@ DB에서 회의용 CSV 산출:
   --output-dir data/processed/exposure_20250630
 ```
 
+기간별 시계열 CSV 산출:
+
+```bash
+.venv/bin/bitamin-finance export-timeseries \
+  --target stock \
+  --start-date 2025-01-02 \
+  --end-date 2025-06-30 \
+  --output data/processed/timeseries/stock_2025_h1.csv
+```
+
+지원 target:
+
+| target | DB table | 날짜 컬럼 | 주요 필터 |
+| --- | --- | --- | --- |
+| `stock` | `fact_stock_daily` | `trade_date` | `--ticker` |
+| `etf` | `fact_etf_daily` | `trade_date` | `--etf-ticker` |
+| `market-index` | `fact_market_index_daily` | `trade_date` | `--index-code`, `--index-name` |
+| `kfi` | `fact_kfi_scores` | `score_date` | `--ticker` |
+| `validation` | `fact_event_validation` | `event_date` | `--ticker` |
+
+필터는 쉼표 구분 또는 반복 입력을 지원한다.
+
+```bash
+.venv/bin/bitamin-finance export-timeseries \
+  --target stock \
+  --start-date 2025-01-02 \
+  --end-date 2025-06-30 \
+  --ticker 005930,000660 \
+  --output data/processed/timeseries/semiconductor_2025_h1.csv
+```
+
 ## 9. 한계 및 보완 예정
 
 | 항목 | 현재 처리 | 보완 방향 |
@@ -430,4 +461,3 @@ DB에서 회의용 CSV 산출:
 | ETF 운용사/자산군 | ETF명 기반 일부 분류 | 운용사 및 테마 분류 룰 고도화 |
 | beta | MVP에서는 결측 | 시장수익률 대비 rolling beta 계산 |
 | ETF 수집 속도 | pykrx 순차 호출 | ETF별 checkpoint 저장 또는 병렬 수집 |
-

@@ -63,6 +63,59 @@ def _read_db_frame(sql: str, params: dict[str, object]) -> pd.DataFrame:
         return pd.DataFrame(result.fetchall(), columns=result.keys())
 
 
+def _parse_filter_values(values: list[str] | None) -> list[str]:
+    if not values:
+        return []
+    parsed: list[str] = []
+    for value in values:
+        parsed.extend(item.strip() for item in value.split(",") if item.strip())
+    return parsed
+
+
+def _add_in_filter(
+    conditions: list[str],
+    params: dict[str, object],
+    column: str,
+    param_prefix: str,
+    values: list[str],
+) -> None:
+    if not values:
+        return
+    placeholders = []
+    for index, value in enumerate(values):
+        key = f"{param_prefix}_{index}"
+        placeholders.append(f":{key}")
+        params[key] = value
+    conditions.append(f"{column} IN ({', '.join(placeholders)})")
+
+
+def cmd_export_timeseries(args: argparse.Namespace) -> None:
+    params: dict[str, object] = {"start_date": args.start_date, "end_date": args.end_date}
+    conditions = [f"{args.date_column} BETWEEN :start_date AND :end_date"]
+    order_by = args.order_by
+
+    tickers = _parse_filter_values(args.ticker)
+    etf_tickers = _parse_filter_values(args.etf_ticker)
+    index_codes = _parse_filter_values(args.index_code)
+    index_names = _parse_filter_values(args.index_name)
+
+    _add_in_filter(conditions, params, args.ticker_column, "ticker", tickers)
+    _add_in_filter(conditions, params, args.etf_ticker_column, "etf_ticker", etf_tickers)
+    _add_in_filter(conditions, params, "index_code", "index_code", index_codes)
+    _add_in_filter(conditions, params, "index_name", "index_name", index_names)
+
+    sql = f"""
+        {args.select_sql}
+        WHERE {' AND '.join(conditions)}
+        ORDER BY {order_by}
+    """
+    df = _read_db_frame(sql, params)
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output, index=False)
+    print(f"Wrote {len(df)} rows to {output}")
+
+
 def _collect_exposure_live(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     client = KRXClient()
     stock_universe = client.collect_stock_universe(args.date)
@@ -157,6 +210,21 @@ def build_parser() -> argparse.ArgumentParser:
     backfill.add_argument("--max-etfs", type=int, default=None)
     backfill.set_defaults(func=cmd_backfill)
 
+    timeseries = sub.add_parser("export-timeseries")
+    timeseries.add_argument(
+        "--target",
+        choices=["stock", "etf", "market-index", "kfi", "validation"],
+        required=True,
+    )
+    timeseries.add_argument("--start-date", required=True, help="YYYY-MM-DD")
+    timeseries.add_argument("--end-date", required=True, help="YYYY-MM-DD")
+    timeseries.add_argument("--ticker", action="append", help="종목코드. 쉼표 구분 또는 반복 입력 가능")
+    timeseries.add_argument("--etf-ticker", action="append", help="ETF 코드. 쉼표 구분 또는 반복 입력 가능")
+    timeseries.add_argument("--index-code", action="append", help="시장지수 코드. 쉼표 구분 또는 반복 입력 가능")
+    timeseries.add_argument("--index-name", action="append", help="시장지수명. 예: KOSPI,KOSDAQ")
+    timeseries.add_argument("--output", required=True, help="출력 CSV 경로")
+    timeseries.set_defaults(func=_dispatch_export_timeseries)
+
     exposure = sub.add_parser("export-exposure")
     exposure.add_argument("--date", required=True, help="ETF holdings 기준일, YYYY-MM-DD")
     exposure.add_argument("--from-db", action="store_true", help="Live pykrx 수집 대신 DB 적재 데이터를 사용")
@@ -181,6 +249,65 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument("--kfi-scores", required=True)
     validate.set_defaults(func=cmd_validate)
     return parser
+
+
+def _dispatch_export_timeseries(args: argparse.Namespace) -> None:
+    if args.ticker and args.target not in {"stock", "kfi", "validation"}:
+        raise SystemExit("--ticker can only be used with stock, kfi, or validation targets.")
+    if args.etf_ticker and args.target != "etf":
+        raise SystemExit("--etf-ticker can only be used with the etf target.")
+    if (args.index_code or args.index_name) and args.target != "market-index":
+        raise SystemExit("--index-code and --index-name can only be used with the market-index target.")
+
+    target_config = {
+        "stock": {
+            "date_column": "f.trade_date",
+            "ticker_column": "f.ticker",
+            "etf_ticker_column": "NULL",
+            "order_by": "f.trade_date, f.ticker",
+            "select_sql": """
+                SELECT f.*, d.name AS stock_name
+                FROM bitamin.fact_stock_daily f
+                LEFT JOIN bitamin.dim_stock d USING (ticker)
+            """,
+        },
+        "etf": {
+            "date_column": "f.trade_date",
+            "ticker_column": "NULL",
+            "etf_ticker_column": "f.etf_ticker",
+            "order_by": "f.trade_date, f.etf_ticker",
+            "select_sql": """
+                SELECT f.*, d.name AS etf_name, d.is_leveraged, d.is_inverse,
+                       d.is_synthetic, d.is_foreign_underlying
+                FROM bitamin.fact_etf_daily f
+                LEFT JOIN bitamin.dim_etf d USING (etf_ticker)
+            """,
+        },
+        "market-index": {
+            "date_column": "trade_date",
+            "ticker_column": "NULL",
+            "etf_ticker_column": "NULL",
+            "order_by": "trade_date, index_code",
+            "select_sql": "SELECT * FROM bitamin.fact_market_index_daily",
+        },
+        "kfi": {
+            "date_column": "score_date",
+            "ticker_column": "ticker",
+            "etf_ticker_column": "NULL",
+            "order_by": "score_date, kfi_korea DESC, ticker",
+            "select_sql": "SELECT * FROM bitamin.fact_kfi_scores",
+        },
+        "validation": {
+            "date_column": "event_date",
+            "ticker_column": "ticker",
+            "etf_ticker_column": "NULL",
+            "order_by": "event_date, decile, ticker",
+            "select_sql": "SELECT * FROM bitamin.fact_event_validation",
+        },
+    }[args.target]
+    for key, value in target_config.items():
+        setattr(args, key, value)
+    cmd_export_timeseries(args)
 
 
 def main() -> None:

@@ -276,7 +276,32 @@ data/processed/exposure_20250630/20250630_stock_etf_exposure_summary.csv
 
 `etf_ownership_ratio`가 큰 종목은 ETF가 상대적으로 많이 보유한 종목입니다.
 
-### 10.8 대시보드 실행
+### 10.8 시계열 CSV 만들기
+
+DB에 쌓인 주식, ETF, 시장지수, K-FI, 검증 데이터를 기간 조건으로 CSV로 뽑을 수 있습니다.
+
+```bash
+.venv/bin/bitamin-finance export-timeseries \
+  --target stock \
+  --start-date 2025-01-02 \
+  --end-date 2025-06-30 \
+  --output data/processed/timeseries/stock_2025_h1.csv
+```
+
+특정 종목만 뽑고 싶으면 `--ticker`를 사용합니다.
+
+```bash
+.venv/bin/bitamin-finance export-timeseries \
+  --target stock \
+  --start-date 2025-01-02 \
+  --end-date 2025-06-30 \
+  --ticker 005930,000660 \
+  --output data/processed/timeseries/semiconductor_2025_h1.csv
+```
+
+ETF는 `--target etf --etf-ticker ...`, 시장지수는 `--target market-index --index-name KOSPI`처럼 사용합니다.
+
+### 10.9 대시보드 실행
 
 전체 서비스를 실행하면 Streamlit과 Airflow도 함께 사용할 수 있습니다.
 
@@ -420,4 +445,3 @@ ETF 전체 PDF 수집은 오래 걸릴 수 있습니다. 처음에는 `--max-etf
 - 종목별 ETF 편입 노출 CSV를 만들고 `etf_ownership_ratio`를 해석할 수 있습니다.
 - K-FI 산식의 각 component가 무엇을 뜻하는지 설명할 수 있습니다.
 - 이벤트 검증에서 `excess_drop`이 무엇인지 이해할 수 있습니다.
-

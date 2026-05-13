@@ -5,3 +5,4 @@ def test_cli_imports_with_sqlalchemy_14() -> None:
     command_names = parser._subparsers._actions[1].choices.keys()
     assert "init-db" in command_names
     assert "export-exposure" in command_names
+    assert "export-timeseries" in command_names
